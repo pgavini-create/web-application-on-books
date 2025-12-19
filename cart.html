@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cart - Online Book Store</title>
+<style>
+body { font-family: Arial; background: #eef2ff; margin: 0; }
+header { background: linear-gradient(45deg, #6a00ff, #0099ff); padding: 20px 40px; color: white; display: flex; justify-content: space-between; align-items: center; }
+nav a { color: white; margin-left: 20px; text-decoration: none; font-weight: bold; font-size: 17px; }
+nav a:hover { text-decoration: underline; }
+h2 { text-align: center; margin: 30px 0 20px; font-size: 28px; }
+.cart-container { width: 90%; max-width: 900px; margin: auto; }
+.cart-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px; margin-bottom: 10px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+.cart-item img { width: 80px; height: 100px; object-fit: cover; border-radius: 5px; }
+.item-info { flex: 1; margin-left: 20px; }
+.item-title { font-weight: bold; font-size: 18px; }
+.item-price { margin-top: 5px; color: #333; }
+.remove-btn { background: #ff4d4d; border: none; color: white; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+.remove-btn:hover { background: #cc0000; }
+.total { text-align: right; font-size: 22px; margin-top: 20px; font-weight: bold; }
+.checkout-btn { display: block; margin: 20px 0; padding: 12px 20px; background: #6a00ff; color: white; font-size: 18px; border: none; border-radius: 8px; cursor: pointer; }
+.checkout-btn:hover { background: #5200cc; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Your Cart</h1>
+<nav>
+    <a href="index.html">Home</a>
+    <a href="catalogue.html">Catalogue</a>
+</nav>
+</header>
+
+<h2>Items in Cart</h2>
+
+<div class="cart-container" id="cart-container">
+<!-- Cart items will appear here -->
+</div>
+
+<div class="total" id="total">Total: $0</div>
+<button class="checkout-btn" onclick="checkout()">Checkout</button>
+
+<script>
+// Map book titles to images (same as catalogue)
+const bookImages = {
+    'The Great Adventure': 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=200&h=250',
+    'Hidden Truths': 'https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg?auto=compress&cs=tinysrgb&w=200&h=250',
+    'Mind Power': 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=200&h=250',
+    'Galaxy Tales': 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=200&h=250',
+    'Lost Kingdom': 'https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=200&h=250',
+    'Love & Roses': 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=200&h=250',
+    'Night Walker': 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=200&h=250',
+    'Rainy Dreams': 'https://images.pexels.com/photos/694740/pexels-photo-694740.jpeg?auto=compress&cs=tinysrgb&w=200&h=250',
+    'Digital World': 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=200&h=250',
+    'Magic Spells': 'https://images.pexels.com/photos/460621/pexels-photo-460621.jpeg?auto=compress&cs=tinysrgb&w=200&h=250',
+    'Dark Secrets': 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=200&h=250',
+    'Ocean Heart': 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=200&h=250',
+    'Future Age': 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=200&h=250',
+    'Historic Wars': 'https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=200&h=250',
+    'Science Wonders': 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=200&h=250'
+};
+
+function loadCart() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const container = document.getElementById("cart-container");
+    container.innerHTML = '';
+
+    if(cart.length === 0){
+        container.innerHTML = '<p style="text-align:center; font-size:18px;">Your cart is empty.</p>';
+        document.getElementById('total').innerText = 'Total: $0';
+        return;
+    }
+
+    let total = 0;
+    cart.forEach((item, index) => {
+        total += item.price;
+        const imgSrc = bookImages[item.title] || 'https://via.placeholder.com/80x100?text=Book';
+        container.innerHTML += `
+            <div class="cart-item">
+                <img src="${imgSrc}">
+                <div class="item-info">
+                    <div class="item-title">${item.title}</div>
+                    <div class="item-price">$${item.price}</div>
+                </div>
+                <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+            </div>
+        `;
+    });
+
+    document.getElementById('total').innerText = 'Total: $' + total;
+}
+
+function removeItem(index) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    loadCart();
+}
+
+function checkout() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if(cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    alert("Thank you for your purchase! Total amount: $" + total);
+    localStorage.removeItem("cart");
+    loadCart();
+}
+
+loadCart();
+</script>
+
+</body>
+</html>

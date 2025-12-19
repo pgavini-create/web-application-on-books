@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Catalogue - Online Book Store</title>
+<style>
+body { margin: 0; font-family: Arial; background: #eef2ff; }
+header { background: linear-gradient(45deg, #6a00ff, #0099ff); padding: 20px 40px; color: white; display: flex; justify-content: space-between; align-items: center; }
+nav a { color: white; margin-left: 20px; text-decoration: none; font-weight: bold; font-size: 17px; }
+nav a:hover { text-decoration: underline; }
+h2 { text-align: center; margin: 30px 0 20px; font-size: 28px; }
+.book-grid { display: flex; flex-wrap: wrap; justify-content: center; }
+.book { width: 200px; background: white; margin: 15px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.3s; text-align: center; }
+.book:hover { transform: scale(1.05); }
+.book img { width: 100%; height: 250px; border-radius: 10px 10px 0 0; object-fit: cover; }
+.book-title { font-weight: bold; padding: 10px 0; }
+.book-price { color: #333; margin-bottom: 10px; }
+.btn { background: #6a00ff; border: none; color: white; padding: 10px; width: 100%; font-size: 15px; border-radius: 0 0 10px 10px; cursor: pointer; }
+.btn:hover { background: #5200cc; }
+</style>
+<script>
+function addToCart(title, price) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({title, price});
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(title + " added to cart!");
+}
+</script>
+</head>
+<body>
+
+<header>
+<h1>Catalogue</h1>
+<nav>
+    <a href="index.html">Home</a>
+    <a href="cart.html">Cart</a>
+</nav>
+</header>
+
+<h2>Available Books</h2>
+
+<div class="book-grid">
+<script>
+const books = [
+    {title: 'The Great Adventure', img: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=200&h=250'},
+    {title: 'Hidden Truths', img: 'https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg?auto=compress&cs=tinysrgb&w=200&h=250'},
+    {title: 'Mind Power', img: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=200&h=250'},
+    {title: 'Galaxy Tales', img: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=200&h=250'},
+    {title: 'Lost Kingdom', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpotWxtMG9mld21UAR4v5z-8A8vZodVzEZsw&s'},
+    {title: 'Love & Roses', img: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=200&h=250'},
+    {title: 'Night Walker', img: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=200&h=250'},
+    {title: 'Rainy Dreams', img: 'https://images.pexels.com/photos/694740/pexels-photo-694740.jpeg?auto=compress&cs=tinysrgb&w=200&h=250'},
+    {title: 'Digital World', img: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=200&h=250'},
+    {title: 'Magic Spells', img: 'https://images.pexels.com/photos/460621/pexels-photo-460621.jpeg?auto=compress&cs=tinysrgb&w=200&h=250'},
+    {title: 'Dark Secrets', img: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=200&h=250'},
+    {title: 'Ocean Heart', img: 'https://t3.ftcdn.net/jpg/07/33/06/14/360_F_733061475_k1tUhExGOlad594irZSpCVEnHOlu0pOS.jpg'},
+    {title: 'Future Age', img: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=200&h=250'},
+    {title: 'Historic Wars', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg/500px-Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg'},
+    {title: 'Science Wonders', img: 'https://i0.wp.com/apeejay.news/wp-content/uploads/2023/10/281023-10-most-read-books-Blog.jpg?resize=740%2C524&ssl=1'}
+];
+
+books.forEach(book => {
+    const price = Math.floor(Math.random() * 20) + 10;
+    document.write(`
+        <div class="book">
+            <img src="${book.img}">
+            <div class="book-title">${book.title}</div>
+            <div class="book-price">$${price}</div>
+            <button class="btn" onclick="addToCart('${book.title}', ${price})">Add to Cart</button>
+        </div>
+    `);
+});
+</script>
+</div>
+
+</body>
+</html>
